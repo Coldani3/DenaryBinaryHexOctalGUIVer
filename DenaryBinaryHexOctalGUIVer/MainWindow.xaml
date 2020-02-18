@@ -1,0 +1,46 @@
+﻿<Window x:Class="DenaryBinaryHexOctalGUIVer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DenaryBinaryHexOctalGUIVer"
+        mc:Ignorable="d"
+        Title="Base Converter" Height="450" Width="800">
+    <Grid MouseLeftButtonDown="Window_UnfocusOnClick">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0.5*"/>
+            <ColumnDefinition Width="*"/>
+
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0" MouseLeftButtonDown="Window_UnfocusOnClick">
+            <Label Style="{StaticResource TitleLabel}" Content="From:"/>
+            <GroupBox>
+                <StackPanel>
+                    <ComboBox x:Name="FromBox" Margin="5,5" SelectionChanged="BaseBox_SelectionChanged" SelectedIndex="0"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Input:"/>
+                        <TextBox x:Name="InputBox" Margin="19,5,0,0" Width="240" LostFocus="InputBox_LostFocus" KeyDown="InputBox_KeyDown"/>
+                    </StackPanel>
+                    <Button x:Name="ForceCalcButton" Content="Calculate" Margin="5,10" Click="ForceCalcButton_Click"/>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+        <StackPanel Grid.Column="1" MouseLeftButtonDown="Window_UnfocusOnClick">
+            <Button x:Name="SwapBasesButton" Content="Swap Bases" Margin="15,43,15,0" Click="SwapBasesButton_Click"/>
+        </StackPanel>
+        <StackPanel Grid.Column="2" MouseLeftButtonDown="Window_UnfocusOnClick">
+            <Label Style="{StaticResource TitleLabel}" Content="To:"/>
+            <GroupBox>
+                <StackPanel>
+                    <ComboBox x:Name="ToBox" Margin="5,5" SelectionChanged="BaseBox_SelectionChanged"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Output:"/>
+                        <TextBox x:Name="OutputBox" Margin="10,5,0,43" Width="240" IsReadOnly="True"/>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+            
+        </StackPanel>
+    </Grid>
+</Window>
