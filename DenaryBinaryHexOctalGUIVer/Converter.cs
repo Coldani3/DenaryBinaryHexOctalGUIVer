@@ -73,11 +73,20 @@ namespace DenaryBinaryHexOctalGUIVer
         }
     }
 
-    public enum Base
+    public class Base
     {
-        BINARY = 2,
-        OCTAL = 8,
-        DENARY = 10,
-        HEXADECIMAL = 16
+        public static readonly Base BINARY = new Base(2);
+        public static readonly Base OCTAL = new Base(8);
+        public static readonly Base DENARY = new Base(10);
+        public static readonly Base HEXADECIMAL = new Base(16);
+
+        public int BaseNumber;
+
+        public Base(int baseNum)
+        {
+            BaseNumber = baseNum;
+        }
+
+        public static explicit operator int(Base baseType) => baseType.BaseNumber;
     }
 }

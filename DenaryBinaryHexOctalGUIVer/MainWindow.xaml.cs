@@ -28,6 +28,8 @@ namespace DenaryBinaryHexOctalGUIVer
             { "Hexadecimal (Base 16)", Base.HEXADECIMAL }
         };
 
+        private const string CustomOption = "Custom";
+
         public MainWindow()
         {
             InitializeComponent();
@@ -40,6 +42,9 @@ namespace DenaryBinaryHexOctalGUIVer
                 FromBox.Items.Add(numBase);
                 ToBox.Items.Add(numBase);
             }
+
+            FromBox.Items.Add(CustomOption);
+            ToBox.Items.Add(CustomOption);
 
             this.FromBox.SelectedIndex = 2;
             this.ToBox.SelectedIndex = 0;
@@ -65,8 +70,15 @@ namespace DenaryBinaryHexOctalGUIVer
         {
             if (FromBox.SelectedIndex != -1)
             {
-                if (!Converter.ValidateForBase(InputBox.Text.ToUpper(), ScreenNameToBase[(string)FromBox.SelectedItem])) InputBox.Text = "";
-                UpdateOutput();
+                if ((string) FromBox.SelectedItem != CustomOption && (string) ToBox.SelectedItem != CustomOption)
+                {
+                    if (!Converter.ValidateForBase(InputBox.Text.ToUpper(), ScreenNameToBase[(string)FromBox.SelectedItem])) InputBox.Text = "";
+                    UpdateOutput();
+                }
+                else
+                {
+                    //TODO: Add custom base input menu (a pop up screen or pop up text field?)
+                }
             }
         }
 

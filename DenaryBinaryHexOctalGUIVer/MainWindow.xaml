@@ -22,6 +22,10 @@
                         <Label Content="Input:"/>
                         <TextBox x:Name="InputBox" Margin="19,5,0,0" Width="240" LostFocus="InputBox_LostFocus" KeyDown="InputBox_KeyDown"/>
                     </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,5,5,5">
+                        <Label Content="Custom Base:"/>
+                        <TextBox x:Name="FromCustomBaseText" Margin="5,5" IsEnabled="False" Width="60"/>
+                    </StackPanel>
                     <Button x:Name="ForceCalcButton" Content="Calculate" Margin="5,10" Click="ForceCalcButton_Click"/>
                 </StackPanel>
             </GroupBox>
@@ -36,7 +40,11 @@
                     <ComboBox x:Name="ToBox" Margin="5,5" SelectionChanged="BaseBox_SelectionChanged"/>
                     <StackPanel Orientation="Horizontal">
                         <Label Content="Output:"/>
-                        <TextBox x:Name="OutputBox" Margin="10,5,0,43" Width="240" IsReadOnly="True"/>
+                        <TextBox x:Name="OutputBox" Margin="10,5,0,5" Width="240" IsReadOnly="True"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,5,5,41">
+                        <Label Content="Custom Base:"/>
+                        <TextBox x:Name="ToCustomBaseText" Margin="5,5" IsEnabled="False" Width="60"/>
                     </StackPanel>
                 </StackPanel>
             </GroupBox>
