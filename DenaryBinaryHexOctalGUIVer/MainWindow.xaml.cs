@@ -34,9 +34,6 @@ namespace DenaryBinaryHexOctalGUIVer
         {
             InitializeComponent();
 
-            //BitmapImage image = new BitmapImage(new Uri(@"icon.png", UriKind.RelativeOrAbsolute));
-            //this.Icon = image;
-
             foreach (string numBase in ScreenNameToBase.Keys)
             {
                 FromBox.Items.Add(numBase);
@@ -70,14 +67,20 @@ namespace DenaryBinaryHexOctalGUIVer
         {
             if (FromBox.SelectedIndex != -1)
             {
-                if ((string) FromBox.SelectedItem != CustomOption && (string) ToBox.SelectedItem != CustomOption)
+                bool toCustomSelected = (string)ToBox.SelectedItem == CustomOption;
+                bool fromCustomSelected = (string)FromBox.SelectedItem == CustomOption;
+
+                ToCustomBaseText.IsEnabled = toCustomSelected;
+                FromCustomBaseText.IsEnabled = fromCustomSelected;
+
+                if (!fromCustomSelected && !toCustomSelected)
                 {
                     if (!Converter.ValidateForBase(InputBox.Text.ToUpper(), ScreenNameToBase[(string)FromBox.SelectedItem])) InputBox.Text = "";
                     UpdateOutput();
                 }
                 else
                 {
-                    //TODO: Add custom base input menu (a pop up screen or pop up text field?)
+                    
                 }
             }
         }
