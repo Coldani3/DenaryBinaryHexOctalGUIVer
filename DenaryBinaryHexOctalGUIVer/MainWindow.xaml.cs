@@ -76,12 +76,9 @@ namespace DenaryBinaryHexOctalGUIVer
                 if (!fromCustomSelected && !toCustomSelected)
                 {
                     if (!Converter.ValidateForBase(InputBox.Text.ToUpper(), ScreenNameToBase[(string)FromBox.SelectedItem])) InputBox.Text = "";
-                    UpdateOutput();
                 }
-                else
-                {
-                    
-                }
+
+                UpdateOutput();
             }
         }
 
@@ -96,12 +93,28 @@ namespace DenaryBinaryHexOctalGUIVer
             return true;
         }
 
+        private bool IsNumber(string text)
+        {
+            foreach (char character in text)
+            {
+                if (!Char.IsDigit(character)) return false;
+            }
+
+            return true;
+        }
+
+
         public void UpdateOutput()
         {
             if (FromBox.SelectedIndex != -1 && ToBox.SelectedIndex != -1 && InputBox.Text != "")
             {
-                Base fromBase = ScreenNameToBase[(string)FromBox.SelectedItem];
-                Base toBase = ScreenNameToBase[(string)ToBox.SelectedItem];
+                Base fromBase;
+                Base toBase;
+                if (FromCustomBaseText.IsEnabled && FromCustomBaseText.Text != "" && IsNumber(FromCustomBaseText.Text)) fromBase = new Base(Convert.ToInt32(FromCustomBaseText.Text));
+                else fromBase = ScreenNameToBase[(string)FromBox.SelectedItem];
+
+                if (ToCustomBaseText.IsEnabled && ToCustomBaseText.Text != "" && IsNumber(ToCustomBaseText.Text)) toBase = new Base(Convert.ToInt32(ToCustomBaseText.Text));
+                else toBase = ScreenNameToBase[(string)ToBox.SelectedItem];
 
                 OutputBox.Text = Converter.ConvertToBase(InputBox.Text, fromBase, toBase);
             }
@@ -118,7 +131,7 @@ namespace DenaryBinaryHexOctalGUIVer
             CheckInputAndUpdate();
         }
 
-        private void InputBox_KeyDown(object sender, KeyEventArgs e)
+        private void BoxesEnterPressed(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
@@ -126,12 +139,19 @@ namespace DenaryBinaryHexOctalGUIVer
             }
         }
 
+
+
         private void SwapBasesButton_Click(object sender, RoutedEventArgs e)
         {
             object fromBase = FromBox.SelectedItem;
             FromBox.SelectedItem = ToBox.SelectedItem;
             ToBox.SelectedItem = fromBase;
             CheckInputAndUpdate();
+        }
+
+        private void FromCustomBaseText_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
         }
     }
 }

@@ -35,7 +35,7 @@ namespace DenaryBinaryHexOctalGUIVer
 
                 if (divided > 0) passedBeginningZeros = true;
 
-                if (divided > 9) output.Append(HexConversions[divided]);
+                if (divided > 9) output.Append((char) ((int) divided + 55)/*HexConversions[divided]*/);
                 else if (passedBeginningZeros) output.Append(divided);
 
                 raw -= (int)Math.Pow((int)to, i) * divided;
