@@ -52,13 +52,27 @@ namespace DenaryBinaryHexOctalGUIVer
             CheckInputAndUpdate();
         }
 
+        /// <summary>
+        /// Checks the input box and updates the output box if the input field is valid.
+        /// </summary>
         private void CheckInputAndUpdate()
         {
             if (FromBox.SelectedIndex != -1)
             {
                 string currInput = InputBox.Text;
+                Base fromBase;
 
-                if (!ValidateInput(InputBox.Text, ScreenNameToBase[(string)FromBox.SelectedItem])) InputBox.Text = "";
+                if ((string) FromBox.SelectedItem == CustomOption)
+                {
+                    //default to 10 if custom base is empty
+                    fromBase = new Base(FromCustomBaseText.Text != "" ? Convert.ToInt32(FromCustomBaseText.Text) : 10);
+                }
+                else
+                {
+                    fromBase = ScreenNameToBase[(string)FromBox.SelectedItem];
+                }
+
+                if (!ValidateInput(InputBox.Text, fromBase)) InputBox.Text = "";
                 else UpdateOutput();
             }
         }
@@ -82,6 +96,12 @@ namespace DenaryBinaryHexOctalGUIVer
             }
         }
 
+        /// <summary>
+        /// Validates a specified string for the specified base.
+        /// </summary>
+        /// <param name="input">The input string to validate.</param>
+        /// <param name="fromBase">The numeric base to validate input against.</param>
+        /// <returns>True if valid, false if not</returns>
         public bool ValidateInput(string input, Base fromBase)
         {
             if (!Converter.ValidateForBase(InputBox.Text.ToUpper(), fromBase))
@@ -92,7 +112,12 @@ namespace DenaryBinaryHexOctalGUIVer
 
             return true;
         }
-
+        
+        /// <summary>
+        /// Check if a whole string is made of numbers
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         private bool IsNumber(string text)
         {
             foreach (char character in text)
@@ -103,7 +128,9 @@ namespace DenaryBinaryHexOctalGUIVer
             return true;
         }
 
-
+        /// <summary>
+        /// Calculates and updates the output box to match the intended output.
+        /// </summary>
         public void UpdateOutput()
         {
             if (FromBox.SelectedIndex != -1 && ToBox.SelectedIndex != -1 && InputBox.Text != "")
@@ -138,8 +165,6 @@ namespace DenaryBinaryHexOctalGUIVer
                 CheckInputAndUpdate();
             }
         }
-
-
 
         private void SwapBasesButton_Click(object sender, RoutedEventArgs e)
         {
