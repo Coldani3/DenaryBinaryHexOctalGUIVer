@@ -8,18 +8,16 @@ namespace DenaryBinaryHexOctalGUIVer
 {
     public class Converter
     {
-        static Dictionary<int, char> HexConversions = new Dictionary<int, char>
-        {
-            { 10, 'A' },
-            { 11, 'B' },
-            { 12, 'C' },
-            { 13, 'D' },
-            { 14, 'E' },
-            { 15, 'F' }
-        };
-
+        /// <summary>
+        /// Converts a string input from a specified base to another specified base.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <returns>The converted answer.</returns>
         public static string ConvertToBase(string input, Base from, Base to)
         {
+            //The value converted to base 10
             int raw = 0;
             StringBuilder output = new StringBuilder();
 
@@ -31,11 +29,12 @@ namespace DenaryBinaryHexOctalGUIVer
             bool passedBeginningZeros = false;
             for (int i = 32; i >= 0; i--)
             {
+                //How many times the current raw number divides by
                 int divided = (int)Math.Floor(raw / Math.Pow((int)to, i));
 
                 if (divided > 0) passedBeginningZeros = true;
 
-                if (divided > 9) output.Append((char) ((int) divided + 55)/*HexConversions[divided]*/);
+                if (divided > 9) output.Append((char) ((int) divided + 55));
                 else if (passedBeginningZeros) output.Append(divided);
 
                 raw -= (int)Math.Pow((int)to, i) * divided;
