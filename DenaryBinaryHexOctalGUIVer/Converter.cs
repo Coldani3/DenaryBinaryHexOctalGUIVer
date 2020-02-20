@@ -49,9 +49,9 @@ namespace DenaryBinaryHexOctalGUIVer
         /// <summary>
         /// Validates if the string matches the specified base.
         /// </summary>
-        /// <param name="input"></param>
-        /// <param name="numBase"></param>
-        /// <returns></returns>
+        /// <param name="input">Input string to validate.</param>
+        /// <param name="numBase">The base to validate input matches.</param>
+        /// <returns>True if input is a string of numeric base numBase.</returns>
         public static bool ValidateForBase(string input, Base numBase)
         {
             for (int i = 0; i < input.Length; i++)

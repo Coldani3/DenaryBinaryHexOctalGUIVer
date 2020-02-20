@@ -24,7 +24,7 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,5,5,5">
                         <Label Content="Custom Base:"/>
-                        <TextBox x:Name="FromCustomBaseText" Margin="5,5" TextChanged="FromCustomBaseText_TextChanged" IsEnabled="False" Width="60"/>
+                        <TextBox x:Name="FromCustomBaseText" Margin="5,5" IsEnabled="False" Width="60"/>
                     </StackPanel>
                     <Button x:Name="ForceCalcButton" Content="Calculate" Margin="5,10" Click="ForceCalcButton_Click"/>
                 </StackPanel>
@@ -44,7 +44,7 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,5,5,41">
                         <Label Content="Custom Base:"/>
-                        <TextBox x:Name="ToCustomBaseText" Margin="5,5" TextChanged="FromCustomBaseText_TextChanged" IsEnabled="False" Width="60"/>
+                        <TextBox x:Name="ToCustomBaseText" Margin="5,5" IsEnabled="False" Width="60"/>
                     </StackPanel>
                 </StackPanel>
             </GroupBox>
