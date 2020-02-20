@@ -65,7 +65,7 @@ namespace DenaryBinaryHexOctalGUIVer
                 if ((string) FromBox.SelectedItem == CustomOption)
                 {
                     //default to 10 if custom base is empty
-                    fromBase = new Base(FromCustomBaseText.Text != "" ? Convert.ToInt32(FromCustomBaseText.Text) : 10);
+                    fromBase = FromCustomBaseText.Text != "" ? new Base(Convert.ToInt32(FromCustomBaseText.Text)) : Base.DENARY;
                 }
                 else
                 {
@@ -73,7 +73,7 @@ namespace DenaryBinaryHexOctalGUIVer
                 }
 
                 if (!ValidateInput(InputBox.Text, fromBase)) InputBox.Text = "";
-                else UpdateOutput();
+                else UpdateOutput(); //if custom base is selected and there is nothing in the custom base box do not update output.
             }
         }
 
@@ -135,13 +135,38 @@ namespace DenaryBinaryHexOctalGUIVer
         {
             if (FromBox.SelectedIndex != -1 && ToBox.SelectedIndex != -1 && InputBox.Text != "")
             {
+                //if the custom base option is selected and the custom base text is not empty and the custom base is a number then use the custom base option
                 Base fromBase;
                 Base toBase;
-                if (FromCustomBaseText.IsEnabled && FromCustomBaseText.Text != "" && IsNumber(FromCustomBaseText.Text)) fromBase = new Base(Convert.ToInt32(FromCustomBaseText.Text));
-                else fromBase = ScreenNameToBase[(string)FromBox.SelectedItem];
+
+                if ((string) FromBox.SelectedItem == CustomOption)
+                {
+                    if (FromCustomBaseText.Text != "" && IsNumber(FromCustomBaseText.Text)) fromBase = new Base(Convert.ToInt32(FromCustomBaseText.Text));
+                    else fromBase = Base.DENARY;
+                }
+                else
+                {
+                    fromBase = ScreenNameToBase[(string)FromBox.SelectedItem];
+                }
+
+                if ((string)ToBox.SelectedItem == CustomOption)
+                {
+                    if (ToCustomBaseText.Text != "" && IsNumber(ToCustomBaseText.Text)) toBase = new Base(Convert.ToInt32(ToCustomBaseText.Text));
+                    else toBase = Base.DENARY;
+                }
+                else
+                {
+                    toBase = ScreenNameToBase[(string)ToBox.SelectedItem];
+                }
+
+                //else if ()
+                //else fromBase = Base.DENARY;
+
+                /*if (FromCustomBaseText.IsEnabled && FromCustomBaseText.Text != "" && IsNumber(FromCustomBaseText.Text)) fromBase = new Base(Convert.ToInt32(FromCustomBaseText.Text));
+                else fromBase = ((string) FromBox.SelectedItem != CustomOption ? ScreenNameToBase[(string)FromBox.SelectedItem] : Base.DENARY);
 
                 if (ToCustomBaseText.IsEnabled && ToCustomBaseText.Text != "" && IsNumber(ToCustomBaseText.Text)) toBase = new Base(Convert.ToInt32(ToCustomBaseText.Text));
-                else toBase = ScreenNameToBase[(string)ToBox.SelectedItem];
+                else toBase = ((string)ToBox.SelectedItem != CustomOption ? ScreenNameToBase[(string)FromBox.SelectedItem] : Base.DENARY);//toBase = ScreenNameToBase[(string)ToBox.SelectedItem];*/
 
                 OutputBox.Text = Converter.ConvertToBase(InputBox.Text, fromBase, toBase);
             }

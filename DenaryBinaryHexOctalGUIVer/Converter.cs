@@ -23,7 +23,8 @@ namespace DenaryBinaryHexOctalGUIVer
 
             for (int i = 0; i < input.Length; i++)
             {
-                raw += (Convert.ToInt32(input[input.Length - i - 1]) - 48) * (int)Math.Pow((int)from, i);
+                char letter = input[input.Length - i - 1];
+                raw += ((Convert.ToInt32(letter) - (Char.IsDigit(letter) ? 48 : 55)) * (int)Math.Pow((int)from, i));
             }
 
             bool passedBeginningZeros = false;
@@ -32,11 +33,13 @@ namespace DenaryBinaryHexOctalGUIVer
                 //How many times the current raw number divides by
                 int divided = (int)Math.Floor(raw / Math.Pow((int)to, i));
 
+                //Stop it turning into 0000000000000000001010 or something similar
                 if (divided > 0) passedBeginningZeros = true;
 
-                if (divided > 9) output.Append((char) ((int) divided + 55));
+                if (divided > 9) output.Append((char) ((int) divided + 55)); //append appropriate letter for > base 10 using the fact that A (10) is ASCII code 55 + 10 = 65 TODO: Figure out what to do for > base 36
                 else if (passedBeginningZeros) output.Append(divided);
 
+                //reduce the raw value
                 raw -= (int)Math.Pow((int)to, i) * divided;
             }
 
@@ -57,7 +60,7 @@ namespace DenaryBinaryHexOctalGUIVer
                             return false;
                         }
                     }
-                    else if (Char.IsLetter(letter) && Convert.ToInt32(letter) - 49 > 'F')
+                    else if (Char.IsLetter(letter) && Convert.ToInt32(letter) - 49 > (65 + (int) numBase) /* 'F'*/)
                     {
                         return false;
                     }
