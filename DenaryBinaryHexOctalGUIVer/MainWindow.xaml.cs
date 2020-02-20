@@ -62,15 +62,8 @@ namespace DenaryBinaryHexOctalGUIVer
                 string currInput = InputBox.Text;
                 Base fromBase;
 
-                if ((string) FromBox.SelectedItem == CustomOption)
-                {
-                    //default to 10 if custom base is empty
-                    fromBase = FromCustomBaseText.Text != "" ? new Base(Convert.ToInt32(FromCustomBaseText.Text)) : Base.DENARY;
-                }
-                else
-                {
-                    fromBase = ScreenNameToBase[(string)FromBox.SelectedItem];
-                }
+                if ((string) FromBox.SelectedItem == CustomOption) fromBase = FromCustomBaseText.Text != "" ? new Base(Convert.ToInt32(FromCustomBaseText.Text)) : Base.DENARY; //Default to 10 if in doubt
+                else fromBase = ScreenNameToBase[(string)FromBox.SelectedItem];
 
                 if (!ValidateInput(InputBox.Text, fromBase)) InputBox.Text = "";
                 else UpdateOutput(); //if custom base is selected and there is nothing in the custom base box do not update output.
@@ -144,29 +137,14 @@ namespace DenaryBinaryHexOctalGUIVer
                     if (FromCustomBaseText.Text != "" && IsNumber(FromCustomBaseText.Text)) fromBase = new Base(Convert.ToInt32(FromCustomBaseText.Text));
                     else fromBase = Base.DENARY;
                 }
-                else
-                {
-                    fromBase = ScreenNameToBase[(string)FromBox.SelectedItem];
-                }
+                else fromBase = ScreenNameToBase[(string)FromBox.SelectedItem];
 
                 if ((string)ToBox.SelectedItem == CustomOption)
                 {
                     if (ToCustomBaseText.Text != "" && IsNumber(ToCustomBaseText.Text)) toBase = new Base(Convert.ToInt32(ToCustomBaseText.Text));
                     else toBase = Base.DENARY;
                 }
-                else
-                {
-                    toBase = ScreenNameToBase[(string)ToBox.SelectedItem];
-                }
-
-                //else if ()
-                //else fromBase = Base.DENARY;
-
-                /*if (FromCustomBaseText.IsEnabled && FromCustomBaseText.Text != "" && IsNumber(FromCustomBaseText.Text)) fromBase = new Base(Convert.ToInt32(FromCustomBaseText.Text));
-                else fromBase = ((string) FromBox.SelectedItem != CustomOption ? ScreenNameToBase[(string)FromBox.SelectedItem] : Base.DENARY);
-
-                if (ToCustomBaseText.IsEnabled && ToCustomBaseText.Text != "" && IsNumber(ToCustomBaseText.Text)) toBase = new Base(Convert.ToInt32(ToCustomBaseText.Text));
-                else toBase = ((string)ToBox.SelectedItem != CustomOption ? ScreenNameToBase[(string)FromBox.SelectedItem] : Base.DENARY);//toBase = ScreenNameToBase[(string)ToBox.SelectedItem];*/
+                else toBase = ScreenNameToBase[(string)ToBox.SelectedItem];
 
                 OutputBox.Text = Converter.ConvertToBase(InputBox.Text, fromBase, toBase);
             }
@@ -185,10 +163,7 @@ namespace DenaryBinaryHexOctalGUIVer
 
         private void BoxesEnterPressed(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
-            {
-                CheckInputAndUpdate();
-            }
+            if (e.Key == Key.Enter) CheckInputAndUpdate();
         }
 
         private void SwapBasesButton_Click(object sender, RoutedEventArgs e)

@@ -11,9 +11,9 @@ namespace DenaryBinaryHexOctalGUIVer
         /// <summary>
         /// Converts a string input from a specified base to another specified base.
         /// </summary>
-        /// <param name="input"></param>
-        /// <param name="from"></param>
-        /// <param name="to"></param>
+        /// <param name="input">The input string to convert.</param>
+        /// <param name="from">The base to convert from.</param>
+        /// <param name="to">The base to conver to.</param>
         /// <returns>The converted answer.</returns>
         public static string ConvertToBase(string input, Base from, Base to)
         {
@@ -46,6 +46,12 @@ namespace DenaryBinaryHexOctalGUIVer
             return output.ToString();
         }
 
+        /// <summary>
+        /// Validates if the string matches the specified base.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="numBase"></param>
+        /// <returns></returns>
         public static bool ValidateForBase(string input, Base numBase)
         {
             for (int i = 0; i < input.Length; i++)
@@ -53,22 +59,10 @@ namespace DenaryBinaryHexOctalGUIVer
                 char letter = input.ToUpper()[i];
                 if (Char.IsLetterOrDigit(letter))
                 {
-                    if (Char.IsDigit(letter))
-                    {
-                        if (Convert.ToInt32(letter) - 49 > ((int) numBase) - 1)
-                        {
-                            return false;
-                        }
-                    }
-                    else if (Char.IsLetter(letter) && Convert.ToInt32(letter) - 49 > (65 + (int) numBase) /* 'F'*/)
-                    {
-                        return false;
-                    }
+                    if (Char.IsDigit(letter) && Convert.ToInt32(letter) - 49 > ((int) numBase) - 1) return false;
+                    else if (Char.IsLetter(letter) && Convert.ToInt32(letter) - 55 > ((int) numBase) - 1) return false;
                 }
-                else
-                {
-                    return false;
-                }
+                else return false;
             }
 
             return true;
