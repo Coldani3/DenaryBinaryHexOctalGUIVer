@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace DenaryBinaryHexOctalGUIVer
 {
@@ -71,10 +68,10 @@ namespace DenaryBinaryHexOctalGUIVer
 
     public class Base
     {
-        public static readonly Base BINARY = new Base(2);
-        public static readonly Base OCTAL = new Base(8);
-        public static readonly Base DENARY = new Base(10);
-        public static readonly Base HEXADECIMAL = new Base(16);
+        public static readonly Base Binary = new Base(2);
+        public static readonly Base Octal = new Base(8);
+        public static readonly Base Denary = new Base(10);
+        public static readonly Base Hexadecimal = new Base(16);
 
         public int BaseNumber;
 

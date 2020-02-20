@@ -1,17 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Input;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace DenaryBinaryHexOctalGUIVer
 {
@@ -22,10 +13,10 @@ namespace DenaryBinaryHexOctalGUIVer
     {
         private static Dictionary<string, Base> ScreenNameToBase = new Dictionary<string, Base>
         {
-            { "Binary (Base 2)", Base.BINARY },
-            { "Octal (Base 8)", Base.OCTAL },
-            { "Denary (Base 10)", Base.DENARY },
-            { "Hexadecimal (Base 16)", Base.HEXADECIMAL }
+            { "Binary (Base 2)", Base.Binary },
+            { "Octal (Base 8)", Base.Octal },
+            { "Denary (Base 10)", Base.Denary },
+            { "Hexadecimal (Base 16)", Base.Hexadecimal }
         };
         private const string CustomOption = "Custom";
 
@@ -57,7 +48,7 @@ namespace DenaryBinaryHexOctalGUIVer
                 string currInput = this.InputBox.Text;
                 Base fromBase;
 
-                if ((string)this.FromBox.SelectedItem == CustomOption) fromBase = this.FromCustomBaseText.Text != "" ? new Base(Convert.ToInt32(this.FromCustomBaseText.Text)) : Base.DENARY; //Default to 10 if in doubt
+                if ((string)this.FromBox.SelectedItem == CustomOption) fromBase = this.FromCustomBaseText.Text != "" ? new Base(Convert.ToInt32(this.FromCustomBaseText.Text)) : Base.Denary; //Default to 10 if in doubt
                 else fromBase = ScreenNameToBase[(string)this.FromBox.SelectedItem];
 
                 if (!ValidateInput(this.InputBox.Text, fromBase)) this.InputBox.Text = "";
@@ -111,14 +102,14 @@ namespace DenaryBinaryHexOctalGUIVer
                 if ((string)this.FromBox.SelectedItem == CustomOption)
                 {
                     if (this.FromCustomBaseText.Text != "" && IsNumber(this.FromCustomBaseText.Text)) fromBase = new Base(Convert.ToInt32(this.FromCustomBaseText.Text));
-                    else fromBase = Base.DENARY;
+                    else fromBase = Base.Denary;
                 }
                 else fromBase = ScreenNameToBase[(string)this.FromBox.SelectedItem];
 
                 if ((string)this.ToBox.SelectedItem == CustomOption)
                 {
                     if (this.ToCustomBaseText.Text != "" && IsNumber(this.ToCustomBaseText.Text)) toBase = new Base(Convert.ToInt32(this.ToCustomBaseText.Text));
-                    else toBase = Base.DENARY;
+                    else toBase = Base.Denary;
                 }
                 else toBase = ScreenNameToBase[(string)this.ToBox.SelectedItem];
 
