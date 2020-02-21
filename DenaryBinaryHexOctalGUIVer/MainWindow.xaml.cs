@@ -142,11 +142,6 @@ namespace DenaryBinaryHexOctalGUIVer
             else this.OutputBox.Text = "";
         }
         #region Events
-        private void Window_UnfocusOnClick(object sender, MouseButtonEventArgs e)
-        {
-            ((UIElement) sender).Focus();
-        }
-
         private void ForceCalcButton_Click(object sender, RoutedEventArgs e)
         {
             CheckInputAndUpdate();

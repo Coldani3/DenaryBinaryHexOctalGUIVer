@@ -6,14 +6,14 @@
         xmlns:local="clr-namespace:DenaryBinaryHexOctalGUIVer"
         mc:Ignorable="d"
         Title="Base Converter" Height="450" Width="800">
-    <Grid MouseLeftButtonDown="Window_UnfocusOnClick">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="0.5*"/>
             <ColumnDefinition Width="*"/>
 
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="0" MouseLeftButtonDown="Window_UnfocusOnClick">
+        <StackPanel Grid.Column="0">
             <Label Style="{StaticResource TitleLabel}" Content="From:"/>
             <GroupBox>
                 <StackPanel>
@@ -30,10 +30,10 @@
                 </StackPanel>
             </GroupBox>
         </StackPanel>
-        <StackPanel Grid.Column="1" MouseLeftButtonDown="Window_UnfocusOnClick">
+        <StackPanel Grid.Column="1">
             <Button x:Name="SwapBasesButton" Content="Swap Bases" Margin="15,43,15,0" Click="SwapBasesButton_Click"/>
         </StackPanel>
-        <StackPanel Grid.Column="2" MouseLeftButtonDown="Window_UnfocusOnClick">
+        <StackPanel Grid.Column="2">
             <Label Style="{StaticResource TitleLabel}" Content="To:"/>
             <GroupBox>
                 <StackPanel>
