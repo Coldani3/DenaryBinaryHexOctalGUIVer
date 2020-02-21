@@ -20,6 +20,8 @@ namespace DenaryBinaryHexOctalGUIVer
         };
         private const string CustomOption = "Custom";
 
+        private static bool WarningShown = false;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -51,8 +53,9 @@ namespace DenaryBinaryHexOctalGUIVer
                 if ((string)this.FromBox.SelectedItem == CustomOption) fromBase = this.FromCustomBaseText.Text != "" ? new Base(Convert.ToInt32(this.FromCustomBaseText.Text)) : Base.Denary; //Default to 10 if in doubt
                 else fromBase = ScreenNameToBase[(string)this.FromBox.SelectedItem];
 
+                //only update the output if the base is valid
                 if (!ValidateInput(this.InputBox.Text, fromBase)) this.InputBox.Text = "";
-                else UpdateOutput(); //if custom base is selected and there is nothing in the custom base box do not update output.
+                else UpdateOutput();
             }
         }
 
@@ -101,14 +104,34 @@ namespace DenaryBinaryHexOctalGUIVer
 
                 if ((string)this.FromBox.SelectedItem == CustomOption)
                 {
-                    if (this.FromCustomBaseText.Text != "" && IsNumber(this.FromCustomBaseText.Text)) fromBase = new Base(Convert.ToInt32(this.FromCustomBaseText.Text));
+                    if (this.FromCustomBaseText.Text != "" && IsNumber(this.FromCustomBaseText.Text))
+                    {
+                        int baseNum = Convert.ToInt32(this.FromCustomBaseText.Text);
+                        fromBase = new Base(baseNum);
+
+                        if (baseNum > 36 && !WarningShown)
+                        {
+                            MessageBox.Show("Warning! Bases past 36 are currently not supported as there are no more letters to use to represent numbers past this point! Currently, as we use letters to support higher than 9 (and implementing the (x > 9) system is challenging), there are currently no letters left to support anything past 36, and so for now you must resort to the characters after capital Z in the ASCII system. Anything higher than the base notation equivalent of 42 will likely loop back to A.");
+                            WarningShown = true;
+                        }
+                    }
                     else fromBase = Base.Denary;
                 }
                 else fromBase = ScreenNameToBase[(string)this.FromBox.SelectedItem];
 
                 if ((string)this.ToBox.SelectedItem == CustomOption)
                 {
-                    if (this.ToCustomBaseText.Text != "" && IsNumber(this.ToCustomBaseText.Text)) toBase = new Base(Convert.ToInt32(this.ToCustomBaseText.Text));
+                    if (this.ToCustomBaseText.Text != "" && IsNumber(this.ToCustomBaseText.Text))
+                    {
+                        int baseNum = Convert.ToInt32(this.ToCustomBaseText.Text);
+                        toBase = new Base(baseNum);
+
+                        if (baseNum > 36 && !WarningShown)
+                        {
+                            MessageBox.Show("Warning! Bases past 36 are currently not supported as there are no more letters to use to represent numbers past this point! Currently, as we use letters to support higher than 9 (and implementing the (x > 9) system is challenging), there are currently no letters left to support anything past 36, and so for now you must resort to the characters after capital Z in the ASCII system. Anything higher than the base notation equivalent of 42 will likely loop back to A.");
+                            WarningShown = true;
+                        }
+                    }
                     else toBase = Base.Denary;
                 }
                 else toBase = ScreenNameToBase[(string)this.ToBox.SelectedItem];
@@ -136,8 +159,11 @@ namespace DenaryBinaryHexOctalGUIVer
         private void SwapBasesButton_Click(object sender, RoutedEventArgs e)
         {
             object fromBase = FromBox.SelectedItem;
+            string customFromBase = FromCustomBaseText.Text;
             FromBox.SelectedItem = ToBox.SelectedItem;
             ToBox.SelectedItem = fromBase;
+            FromCustomBaseText.Text = ToCustomBaseText.Text;
+            ToCustomBaseText.Text = customFromBase;
             CheckInputAndUpdate();
         }
 
@@ -161,6 +187,6 @@ namespace DenaryBinaryHexOctalGUIVer
         {
             CheckInputAndUpdate();
         }
-#endregion
+        #endregion
     }
 }

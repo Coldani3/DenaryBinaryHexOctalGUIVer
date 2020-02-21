@@ -56,7 +56,7 @@ namespace DenaryBinaryHexOctalGUIVer
                 char letter = input.ToUpper()[i];
                 if (Char.IsLetterOrDigit(letter))
                 {
-                    if (Char.IsDigit(letter) && Convert.ToInt32(letter) - 49 > ((int) numBase) - 1) return false;
+                    if (Char.IsDigit(letter) && Convert.ToInt32(letter) - 48 > ((int) numBase) - 1) return false;
                     else if (Char.IsLetter(letter) && Convert.ToInt32(letter) - 55 > ((int) numBase) - 1) return false;
                 }
                 else return false;
