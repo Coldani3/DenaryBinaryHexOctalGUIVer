@@ -1,17 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Input;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace DenaryBinaryHexOctalGUIVer
 {
@@ -20,59 +11,64 @@ namespace DenaryBinaryHexOctalGUIVer
     /// </summary>
     public partial class MainWindow : Window
     {
-        private Dictionary<string, Base> ScreenNameToBase = new Dictionary<string, Base>
+        private static Dictionary<string, Base> _screenNameToBase = new Dictionary<string, Base>
         {
-            { "Binary (Base 2)", Base.BINARY },
-            { "Octal (Base 8)", Base.OCTAL },
-            { "Denary (Base 10)", Base.DENARY },
-            { "Hexadecimal (Base 16)", Base.HEXADECIMAL }
+            { "Binary (Base 2)", Base.Binary },
+            { "Octal (Base 8)", Base.Octal },
+            { "Denary (Base 10)", Base.Denary },
+            { "Hexadecimal (Base 16)", Base.Hexadecimal }
         };
+        private const string _customOption = "Custom";
+
+        private static bool _warningShown = false;
+        private readonly string _baseOver36Warning = "Warning! Bases past 36 are currently not supported as there are no more letters to use to represent numbers past this point! \n\nCurrently, as we use letters to support higher than 9 (and implementing the (x > 9) system is challenging), there are currently no letters left to support anything past 36, and so for now you must resort to the characters after capital Z in the ASCII system. Anything higher than the base notation equivalent of 42 will likely loop back to A.";
 
         public MainWindow()
         {
             InitializeComponent();
 
-            //BitmapImage image = new BitmapImage(new Uri(@"icon.png", UriKind.RelativeOrAbsolute));
-            //this.Icon = image;
-
-            foreach (string numBase in ScreenNameToBase.Keys)
+            //Add default options to the base selection boxes
+            foreach (string numBase in _screenNameToBase.Keys)
             {
-                FromBox.Items.Add(numBase);
-                ToBox.Items.Add(numBase);
+                this.FromBox.Items.Add(numBase);
+                this.ToBox.Items.Add(numBase);
             }
+
+            this.FromBox.Items.Add(_customOption);
+            this.ToBox.Items.Add(_customOption);
 
             this.FromBox.SelectedIndex = 2;
             this.ToBox.SelectedIndex = 0;
         }
 
-        private void InputBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            CheckInputAndUpdate();
-        }
-
+        /// <summary>
+        /// Checks the input box and updates the output box if the input field is valid.
+        /// </summary>
         private void CheckInputAndUpdate()
         {
-            if (FromBox.SelectedIndex != -1)
+            if (this.FromBox.SelectedIndex != -1)
             {
-                string currInput = InputBox.Text;
+                string currInput = this.InputBox.Text;
+                Base fromBase;
 
-                if (!ValidateInput(InputBox.Text, ScreenNameToBase[(string)FromBox.SelectedItem])) InputBox.Text = "";
+                if ((string)this.FromBox.SelectedItem == _customOption) fromBase = this.FromCustomBaseText.Text != "" ? new Base(Convert.ToInt32(this.FromCustomBaseText.Text)) : Base.Denary; //Default to 10 if in doubt
+                else fromBase = _screenNameToBase[(string)this.FromBox.SelectedItem];
+
+                //only update the output if the base is valid
+                if (!ValidateInput(this.InputBox.Text, fromBase)) this.InputBox.Text = "";
                 else UpdateOutput();
             }
         }
 
-        private void BaseBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (FromBox.SelectedIndex != -1)
-            {
-                if (!Converter.ValidateForBase(InputBox.Text.ToUpper(), ScreenNameToBase[(string)FromBox.SelectedItem])) InputBox.Text = "";
-                UpdateOutput();
-            }
-        }
-
+        /// <summary>
+        /// Validates a specified string for the specified base.
+        /// </summary>
+        /// <param name="input">The input string to validate.</param>
+        /// <param name="fromBase">The numeric base to validate input against.</param>
+        /// <returns>True if valid, false if not</returns>
         public bool ValidateInput(string input, Base fromBase)
         {
-            if (!Converter.ValidateForBase(InputBox.Text.ToUpper(), fromBase))
+            if (!Converter.ValidateForBase(this.InputBox.Text.ToUpper(), fromBase))
             {
                 MessageBox.Show("Invalid input! It must match the specified base!");
                 return false;
@@ -80,43 +76,112 @@ namespace DenaryBinaryHexOctalGUIVer
 
             return true;
         }
+        
+        /// <summary>
+        /// Check if a whole string is made of numbers
+        /// </summary>
+        /// <param name="text">Text to check</param>
+        /// <returns>True if the string is made up of nothing but numbers.</returns>
+        private bool IsNumber(string text)
+        {
+            foreach (char character in text)
+            {
+                if (!Char.IsDigit(character)) return false;
+            }
 
+            return true;
+        }
+
+        /// <summary>
+        /// Calculates and updates the output box to match the intended output.
+        /// </summary>
         public void UpdateOutput()
         {
-            if (FromBox.SelectedIndex != -1 && ToBox.SelectedIndex != -1 && InputBox.Text != "")
+            if (this.FromBox.SelectedIndex != -1 && this.ToBox.SelectedIndex != -1 && this.InputBox.Text != "")
             {
-                Base fromBase = ScreenNameToBase[(string)FromBox.SelectedItem];
-                Base toBase = ScreenNameToBase[(string)ToBox.SelectedItem];
+                Base fromBase;
+                Base toBase;
 
-                OutputBox.Text = Converter.ConvertToBase(InputBox.Text, fromBase, toBase);
+                if ((string)this.FromBox.SelectedItem == _customOption)
+                {
+                    //check if there is actually something in the custom base box and is actually a number.
+                    if (this.FromCustomBaseText.Text != "" && IsNumber(this.FromCustomBaseText.Text))
+                    {
+                        int baseNum = Convert.ToInt32(this.FromCustomBaseText.Text);
+                        fromBase = new Base(baseNum);
+
+                        if (baseNum > 36 && !_warningShown)
+                        {
+                            MessageBox.Show(_baseOver36Warning);
+                            _warningShown = true;
+                        }
+                    }
+                    else fromBase = Base.Denary;
+                }
+                else fromBase = _screenNameToBase[(string)this.FromBox.SelectedItem];
+
+                if ((string)this.ToBox.SelectedItem == _customOption)
+                {
+                    if (this.ToCustomBaseText.Text != "" && IsNumber(this.ToCustomBaseText.Text))
+                    {
+                        int baseNum = Convert.ToInt32(this.ToCustomBaseText.Text);
+                        toBase = new Base(baseNum);
+
+                        if (baseNum > 36 && !_warningShown)
+                        {
+                            MessageBox.Show(_baseOver36Warning);
+                            _warningShown = true;
+                        }
+                    }
+                    else toBase = Base.Denary;
+                }
+                else toBase = _screenNameToBase[(string)this.ToBox.SelectedItem];
+
+                this.OutputBox.Text = Converter.ConvertToBase(this.InputBox.Text, fromBase, toBase);
             }
-            else OutputBox.Text = "";
+            else this.OutputBox.Text = "";
         }
-
-        private void Window_UnfocusOnClick(object sender, MouseButtonEventArgs e)
-        {
-            ((UIElement) sender).Focus();
-        }
-
+        #region Events
         private void ForceCalcButton_Click(object sender, RoutedEventArgs e)
         {
             CheckInputAndUpdate();
         }
 
-        private void InputBox_KeyDown(object sender, KeyEventArgs e)
+        private void BoxesEnterPressed(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
-            {
-                CheckInputAndUpdate();
-            }
+            if (e.Key == Key.Enter) CheckInputAndUpdate();
         }
 
         private void SwapBasesButton_Click(object sender, RoutedEventArgs e)
         {
             object fromBase = FromBox.SelectedItem;
+            string customFromBase = FromCustomBaseText.Text;
             FromBox.SelectedItem = ToBox.SelectedItem;
             ToBox.SelectedItem = fromBase;
+            FromCustomBaseText.Text = ToCustomBaseText.Text;
+            ToCustomBaseText.Text = customFromBase;
             CheckInputAndUpdate();
         }
+
+        private void BaseBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (FromBox.SelectedIndex != -1)
+            {
+                bool toCustomSelected = (string)ToBox.SelectedItem == _customOption;
+                bool fromCustomSelected = (string)FromBox.SelectedItem == _customOption;
+                ToCustomBaseText.IsEnabled = toCustomSelected;
+                FromCustomBaseText.IsEnabled = fromCustomSelected;
+
+                if (!fromCustomSelected && !toCustomSelected && !Converter.ValidateForBase(InputBox.Text.ToUpper(), _screenNameToBase[(string)FromBox.SelectedItem])) InputBox.Text = "";
+
+                UpdateOutput();
+            }
+        }
+
+        private void InputBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            CheckInputAndUpdate();
+        }
+        #endregion
     }
 }
