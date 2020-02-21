@@ -99,12 +99,12 @@ namespace DenaryBinaryHexOctalGUIVer
         {
             if (this.FromBox.SelectedIndex != -1 && this.ToBox.SelectedIndex != -1 && this.InputBox.Text != "")
             {
-                //if the custom base option is selected and the custom base text is not empty and the custom base is a number then use the custom base option
                 Base fromBase;
                 Base toBase;
 
                 if ((string)this.FromBox.SelectedItem == _customOption)
                 {
+                    //check if there is actually something in the custom base box and is actually a number.
                     if (this.FromCustomBaseText.Text != "" && IsNumber(this.FromCustomBaseText.Text))
                     {
                         int baseNum = Convert.ToInt32(this.FromCustomBaseText.Text);
