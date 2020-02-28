@@ -183,5 +183,13 @@ namespace DenaryBinaryHexOctalGUIVer
             CheckInputAndUpdate();
         }
         #endregion
+
+        private void ClearAllButton_Click(object sender, RoutedEventArgs e)
+        {
+            ToCustomBaseText.Text = "";
+            FromCustomBaseText.Text = "";
+            InputBox.Text = "";
+            OutputBox.Text = "";
+        }
     }
 }
